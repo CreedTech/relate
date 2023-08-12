@@ -10,7 +10,7 @@ export function Navbar() {
                 <div className="max-w-5xl mx-auto flex flex-wrap justify-between items-center">
                     <Link to="/" className="flex items-center">
                         <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                            Conversa DJ
+                            RELATE
                         </span>
                     </Link>
                     <button
@@ -26,7 +26,7 @@ export function Navbar() {
                             fill="currentColor"
                             viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
-                        >
+                     >
                             <path
                                 fillRule="evenodd"
                                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
