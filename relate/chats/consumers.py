@@ -1,6 +1,8 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
+from relate.chats.models import Conversation
+
 
 class ChatConsumer(JsonWebsocketConsumer):
     """
@@ -10,14 +12,22 @@ class ChatConsumer(JsonWebsocketConsumer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
-        self.room_name = None
+        self.user = None
+        self.conversation_name = None
+        self.conversation = None
 
     def connect(self):
+        self.user = self.scope["user"]
+        if not self.user.is_authenticated:
+            return
+
         print("Connected!")
-        self.room_name = "home"
         self.accept()
+        self.conversation_name = f"{self.scope['url_route']['kwargs']['conversation_name']}"
+        self.conversation, created = Conversation.objects.get_or_create(name=self.conversation_name)
+
         async_to_sync(self.channel_layer.group_add)(
-            self.room_name,
+            self.conversation_name,
             self.channel_name,
         )
         self.send_json(

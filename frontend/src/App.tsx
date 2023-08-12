@@ -6,7 +6,7 @@ import { Login } from "./components/Login";
 import { Navbar } from "./components/Navbar";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import Conversations from "./components/Conversations";
+import {Conversations} from "./components/Conversations";
 
 export default function App() {
   return (
