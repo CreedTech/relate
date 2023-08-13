@@ -1,9 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 export function Navbar() {
     const { user, logout } = useContext(AuthContext);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
     return (
         <>
             <nav className="bg-white border-gray-200 px-4 sm:px-6 py-2.5 rounded dark:bg-gray-800">
@@ -15,6 +21,7 @@ export function Navbar() {
                     </Link>
                     <button
                         data-collapse-toggle="mobile-menu"
+                        onClick={toggleMobileMenu}
                         type="button"
                         className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                         aria-controls="mobile-menu"
@@ -46,38 +53,38 @@ export function Navbar() {
                             ></path>
                         </svg>
                     </button>
-                    <div className="hidden w-full md:block md:w-auto" id="mobile-menu">
-                        <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-                            <li>
-                                <Link
-                                    to="/"
-                                    className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
-                                    aria-current="page"
-                                >
-                                    Chats
-                                </Link>
-                            </li>
-                            {
-                                !user ? (
-                                    <li>
-                                        <Link
-                                            to="/login"
-                                            className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
-                                        >
-                                            Login
-                                        </Link>
-                                    </li>
-                                ) : (
-                                    <>
-                                        <span className="text-white">Logged in: {user.username}</span>
-                                        <button className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white" onClick={logout}>Logout</button>
-                                    </>
-                                )
-                            }
-                        </ul>
-                    </div>
+                    <div className={`w-full md:block md:w-auto ${isMobileMenuOpen ? " block" : "hidden"}`} id="mobile-menu">
+                    <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+                        <li>
+                            <Link
+                                to="/"
+                                className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
+                                aria-current="page"
+                            >
+                                Chats
+                            </Link>
+                        </li>
+                        {
+                            !user ? (
+                                <li>
+                                    <Link
+                                        to="/login"
+                                        className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
+                                    >
+                                        Login
+                                    </Link>
+                                </li>
+                            ) : (
+                                <>
+                                    <span className="text-white">Logged in: {user.username}</span>
+                                    <button className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white" onClick={logout}>Logout</button>
+                                </>
+                            )
+                        }
+                    </ul>
                 </div>
-            </nav>
+            </div>
+        </nav >
             <div className="max-w-5xl mx-auto py-6">
                 <Outlet />
             </div>
