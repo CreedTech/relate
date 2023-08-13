@@ -41,6 +41,7 @@ export function Chat() {
                         break;
                     case "last_50_messages":
                         setMessageHistory(data.messages);
+                        setHasMoreMessages(data.has_more);
                         break;
                     default:
                         console.error("Unknown message type!");
