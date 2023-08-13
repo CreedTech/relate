@@ -31,7 +31,7 @@ export function Chat() {
                         setWelcomeMessage(data.message);
                         break;
                     case "chat_message_echo":
-                        setMessageHistory((prev: any) => prev.concat(data));
+                        setMessageHistory((prev: any) => prev.concat(data.message));
                         break;
                     default:
                         console.error("Unknown message type!");
@@ -53,9 +53,9 @@ export function Chat() {
         setMessage(e.target.value);
     }
 
-    function handleChangeName(e: any) {
-        setName(e.target.value);
-    }
+    // function handleChangeName(e: any) {
+    //     setName(e.target.value);
+    // }
 
     const handleSubmit = () => {
         sendJsonMessage({
@@ -71,13 +71,13 @@ export function Chat() {
         <div>
             <span>The WebSocket is currently {connectionStatus}</span>
             <p>{welcomeMessage}</p>
-            <input
+            {/* <input
                 name="name"
                 placeholder="Name"
                 onChange={handleChangeName}
                 value={name}
                 className="shadow-sm sm:text-sm border-gray-300 bg-gray-100 rounded-md"
-            />
+            /> */}
             <input
                 name="message"
                 placeholder="Message"
