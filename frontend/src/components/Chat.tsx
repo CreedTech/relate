@@ -33,6 +33,9 @@ export function Chat() {
                     case "chat_message_echo":
                         setMessageHistory((prev: any) => prev.concat(data.message));
                         break;
+                    case "last_50_messages":
+                        setMessageHistory(data.messages);
+                        break;
                     default:
                         console.error("Unknown message type!");
                         break;

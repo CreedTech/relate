@@ -45,10 +45,18 @@ class ChatConsumer(JsonWebsocketConsumer):
             self.conversation_name,
             self.channel_name,
         )
+        # self.send_json(
+        #     {
+        #         "type": "welcome_message",
+        #         "message": "Hey there! You've successfully connected!",
+        #     }
+        # )
+
+        messages = self.conversation.messages.all().order_by("-timestamp")[0:50]
         self.send_json(
             {
-                "type": "welcome_message",
-                "message": "Hey there! You've successfully connected!",
+                "type": "last_50_messages",
+                "messages": MessageSerializer(messages, many=True).data,
             }
         )
 
