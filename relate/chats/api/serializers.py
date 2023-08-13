@@ -13,7 +13,8 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = (
             "id",
-            "conversation" "from_user",
+            "conversation",
+            "from_user",
             "to_user",
             "content",
             "timestamp",
