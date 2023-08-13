@@ -54,37 +54,42 @@ export function Navbar() {
                         </svg>
                     </button>
                     <div className={`w-full md:block md:w-auto ${isMobileMenuOpen ? " block" : "hidden"}`} id="mobile-menu">
-                    <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-                        <li>
-                            <Link
-                                to="/"
-                                className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
-                                aria-current="page"
-                            >
-                                Chats
-                            </Link>
-                        </li>
-                        {
-                            !user ? (
-                                <li>
-                                    <Link
-                                        to="/login"
-                                        className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
-                                    >
-                                        Login
-                                    </Link>
-                                </li>
-                            ) : (
-                                <>
-                                    <span className="text-white">Logged in: {user.username}</span>
-                                    <button className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white" onClick={logout}>Logout</button>
-                                </>
-                            )
-                        }
-                    </ul>
+                        <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+                            <li>
+                                <Link
+                                    to="/"
+                                    className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
+                                    aria-current="page"
+                                >
+                                    Chats
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/conversations" className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white" aria-current="page">
+                                    Active Conversations
+                                </Link>
+                            </li>
+                            {
+                                !user ? (
+                                    <li>
+                                        <Link
+                                            to="/login"
+                                            className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white"
+                                        >
+                                            Login
+                                        </Link>
+                                    </li>
+                                ) : (
+                                    <>
+                                        <span className="text-white">Logged in: {user.username}</span>
+                                        <button className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white" onClick={logout}>Logout</button>
+                                    </>
+                                )
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav >
+            </nav >
             <div className="max-w-5xl mx-auto py-6">
                 <Outlet />
             </div>
