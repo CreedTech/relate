@@ -2,9 +2,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.contrib.auth import get_user_model
 
-from relate.chats.models import Conversation
-
-# , Message
+from relate.chats.api.serializers import MessageSerializer
+from relate.chats.models import Conversation, Message
 
 User = get_user_model()
 
@@ -51,19 +50,19 @@ class ChatConsumer(JsonWebsocketConsumer):
 
         if message_type == "chat_message":
 
-            # message = Message.objects.create(
-            #     from_user=self.user,
-            #     to_user=self.get_receiver(),
-            #     content=content["message"],
-            #     conversation=self.conversation,
-            # )
+            message = Message.objects.create(
+                from_user=self.user,
+                to_user=self.get_receiver(),
+                content=content["message"],
+                conversation=self.conversation,
+            )
 
             async_to_sync(self.channel_layer.group_send)(
                 self.conversation_name,
                 {
                     "type": "chat_message_echo",
-                    "name": content["name"],
-                    "message": content["message"],
+                    "name": self.user.username,
+                    "message": MessageSerializer(message).data,
                 },
             )
         return super().receive_json(content, **kwargs)
