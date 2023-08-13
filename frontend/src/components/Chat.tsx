@@ -95,7 +95,7 @@ export function Chat() {
             <ul>
                 {messageHistory.map((message: any, idx: number) => (
                     <div className="border border-gray-200 py-3 px-3" key={idx}>
-                        {message.name}: {message.message}
+                        {message.from_user.username}: {message.content}
                     </div>
                 ))}
             </ul>
