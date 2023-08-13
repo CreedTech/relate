@@ -45,12 +45,22 @@ class ChatConsumer(JsonWebsocketConsumer):
             self.conversation_name,
             self.channel_name,
         )
-        # self.send_json(
-        #     {
-        #         "type": "welcome_message",
-        #         "message": "Hey there! You've successfully connected!",
-        #     }
-        # )
+        self.send_json(
+            {
+                "type": "online_user_list",
+                "users": [user.username for user in self.conversation.online.all()],
+            }
+        )
+
+        async_to_sync(self.channel_layer.group_send)(
+            self.conversation_name,
+            {
+                "type": "user_join",
+                "user": self.user.username,
+            },
+        )
+
+        self.conversation.online.add(self.user)
 
         messages = self.conversation.messages.all().order_by("-timestamp")[0:50]
         message_count = self.conversation.messages.all().count()
