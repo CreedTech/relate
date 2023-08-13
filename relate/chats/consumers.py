@@ -1,3 +1,6 @@
+import json
+from uuid import UUID
+
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.contrib.auth import get_user_model
@@ -6,6 +9,14 @@ from relate.chats.api.serializers import MessageSerializer
 from relate.chats.models import Conversation, Message
 
 User = get_user_model()
+
+
+class UUIDEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, UUID):
+            # if the obj is uuid, we simply return the value of uuid
+            return obj.hex
+        return json.JSONEncoder.default(self, obj)
 
 
 class ChatConsumer(JsonWebsocketConsumer):
@@ -77,3 +88,7 @@ class ChatConsumer(JsonWebsocketConsumer):
     def chat_message_echo(self, event):
         print(event)
         self.send_json(event)
+
+    @classmethod
+    def encode_json(cls, content):
+        return json.dumps(content, cls=UUIDEncoder)
