@@ -71,4 +71,4 @@ INSTALLED_APPS += ["django_extensions"]  # noqa: F405
 WEBPACK_LOADER["DEFAULT"]["CACHE"] = not DEBUG  # noqa: F405
 # Your stuff...
 # ------------------------------------------------------------------------------
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://192.168.0.155:3000", "192.168.0.155:3000"]

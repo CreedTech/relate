@@ -74,6 +74,15 @@ class ChatConsumer(JsonWebsocketConsumer):
 
     def disconnect(self, code):
         print("Disconnected!")
+        if self.user.is_authenticated:
+            async_to_sync(self.channel_layer.group_send)(
+                self.conversation_name,
+                {
+                    "type": "user_leave",
+                    "user": self.user.username,
+                },
+            )
+            self.conversation.online.remove(self.user)
         return super().disconnect(code)
 
     def receive_json(self, content, **kwargs):
@@ -107,6 +116,12 @@ class ChatConsumer(JsonWebsocketConsumer):
 
     def chat_message_echo(self, event):
         print(event)
+        self.send_json(event)
+
+    def user_join(self, event):
+        self.send_json(event)
+
+    def user_leave(self, event):
         self.send_json(event)
 
     @classmethod
