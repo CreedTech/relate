@@ -95,7 +95,7 @@ class ChatConsumer(JsonWebsocketConsumer):
         # Update the unread message count
         unread_count = Message.objects.filter(to_user=self.user, read=False).count()
         async_to_sync(self.channel_layer.group_send)(
-            self.user.usernname + "__notifications",
+            self.user.username + "__notifications",
             {
                 "type": "unread_count",
                 "unread_count": unread_count,
