@@ -62,7 +62,7 @@ class ChatConsumer(JsonWebsocketConsumer):
 
         self.conversation.online.add(self.user)
 
-        messages = self.conversation.messages.all().order_by("-timestamp")[0:50]
+        messages = self.conversation.messages.all().order_by("-timestamp")[0:10]
         message_count = self.conversation.messages.all().count()
         self.send_json(
             {
