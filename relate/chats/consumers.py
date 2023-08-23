@@ -88,6 +88,30 @@ class ChatConsumer(JsonWebsocketConsumer):
     def receive_json(self, content, **kwargs):
         message_type = content["type"]
 
+        if message_type == "read_messages":
+            messages_to_me = self.conversation.messages.filter(to_user=self.user)
+            messages_to_me.update(read=True)
+
+        # Update the unread message count
+        unread_count = Message.objects.filter(to_user=self.user, read=False).count()
+        async_to_sync(self.channel_layer.group_send)(
+            self.user.usernname + "__notifications",
+            {
+                "type": "unread_count",
+                "unread_count": unread_count,
+            },
+        )
+
+        if message_type == "typing":
+            async_to_sync(self.channel_layer.group_send)(
+                self.conversation_name,
+                {
+                    "type": "typing",
+                    "user": self.user.username,
+                    "typing": content["typing"],
+                },
+            )
+
         if message_type == "chat_message":
 
             message = Message.objects.create(
@@ -106,15 +130,16 @@ class ChatConsumer(JsonWebsocketConsumer):
                 },
             )
 
-        if message_type == "typing":
+            notification_group_name = self.get_receiver().username + "__notifications"
             async_to_sync(self.channel_layer.group_send)(
-                self.conversation_name,
+                notification_group_name,
                 {
-                    "type": "typing",
-                    "user": self.user.username,
-                    "typing": content["typing"],
+                    "type": "new_message_notification",
+                    "name": self.user.username,
+                    "message": MessageSerializer(message).data,
                 },
             )
+
         return super().receive_json(content, **kwargs)
 
     def get_receiver(self):
@@ -135,6 +160,12 @@ class ChatConsumer(JsonWebsocketConsumer):
         self.send_json(event)
 
     def user_leave(self, event):
+        self.send_json(event)
+
+    def new_message_notification(self, event):
+        self.send_json(event)
+
+    def unread_count(self, event):
         self.send_json(event)
 
     @classmethod
@@ -168,3 +199,16 @@ class NotificationConsumer(JsonWebsocketConsumer):
             }
         )
         # Send count of unread messages
+
+    def disconnect(self, code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.notification_group_name,
+            self.channel_name,
+        )
+        return super().disconnect(code)
+
+    def new_message_notification(self, event):
+        self.send_json(event)
+
+    def unread_count(self, event):
+        self.send_json(event)
