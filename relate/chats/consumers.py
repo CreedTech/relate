@@ -85,6 +85,13 @@ class ChatConsumer(JsonWebsocketConsumer):
             self.conversation.online.remove(self.user)
         return super().disconnect(code)
 
+    def get_receiver(self):
+        usernames = self.conversation_name.split("__")
+        for username in usernames:
+            if username != self.user.username:
+                # This is the receiver
+                return User.objects.get(username=username)
+
     def receive_json(self, content, **kwargs):
         message_type = content["type"]
 
@@ -141,13 +148,6 @@ class ChatConsumer(JsonWebsocketConsumer):
             )
 
         return super().receive_json(content, **kwargs)
-
-    def get_receiver(self):
-        usernames = self.conversation_name.split("__")
-        for username in usernames:
-            if username != self.user.username:
-                # This is the receiver
-                return User.objects.get(username=username)
 
     def chat_message_echo(self, event):
         print(event)
