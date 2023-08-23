@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import { NotificationContext } from "../contexts/NotificationContext";
 
 export function Navbar() {
     const { user, logout } = useContext(AuthContext);
+    const { unreadMessageCount } = useContext(NotificationContext);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const toggleMobileMenu = () => {
@@ -66,7 +68,13 @@ export function Navbar() {
                             </li>
                             <li>
                                 <Link to="/conversations" className="block py-2 pr-4 pl-3 text-white md:p-0 dark:text-white" aria-current="page">
-                                    Active Conversations
+                                    Active Conversations {
+                                        unreadMessageCount > 0 && (
+                                            <span className="ml-2 inline-flex items-center justify-center h-6 w-6 rounded-full bg-white">
+                                                <span className="text-xs font-medium leading-none text-gray-800">{unreadMessageCount}</span>
+                                            </span>
+                                        )
+                                    }
                                 </Link>
                             </li>
                             {

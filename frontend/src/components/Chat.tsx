@@ -26,7 +26,7 @@ export function Chat() {
     const timeout = useRef<any>();
 
     const { readyState, sendJsonMessage } = useWebSocket(
-        user ? `ws://127.0.0.1:8000/${conversationName}/` : null,
+        user ? `ws://127.0.0.1:8000/chats/${conversationName}/` : null,
         {
             queryParams: {
                 token: user ? user.token : "",

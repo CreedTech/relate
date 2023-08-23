@@ -140,3 +140,31 @@ class ChatConsumer(JsonWebsocketConsumer):
     @classmethod
     def encode_json(cls, content):
         return json.dumps(content, cls=UUIDEncoder)
+
+
+class NotificationConsumer(JsonWebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = None
+        self.notification_group_name = None
+
+    def connect(self):
+        self.user = self.scope["user"]
+        if not self.user.is_authenticated:
+            return
+
+        self.accept()
+        self.notification_group_name = self.user.username + "__notifications"
+        async_to_sync(self.channel_layer.group_add)(
+            self.notification_group_name,
+            self.channel_name,
+        )
+
+        unread_count = Message.objects.filter(to_user=self.user, read=False).count()
+        self.send_json(
+            {
+                "type": "unread_count",
+                "unread_count": unread_count,
+            }
+        )
+        # Send count of unread messages
