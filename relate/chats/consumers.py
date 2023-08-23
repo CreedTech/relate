@@ -68,7 +68,7 @@ class ChatConsumer(JsonWebsocketConsumer):
             {
                 "type": "last_50_messages",
                 "messages": MessageSerializer(messages, many=True).data,
-                "has_more": message_count > 50,
+                "has_more": message_count > 5,
             }
         )
 
