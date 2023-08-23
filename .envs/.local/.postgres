@@ -4,5 +4,5 @@ POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 POSTGRES_DB=relate
 POSTGRES_USER=debug
-POSTGRES_PASSWORD=temida
+POSTGRES_PASSWORD=temidayo4
 # export DATABASE_URL=postgres://postgres:<password>@127.0.0.1:5432/<DB name given to createdb>

@@ -13,9 +13,6 @@ from pathlib import Path
 
 from django.core.asgi import get_asgi_application
 
-from config import routing  # noqa isort:skip
-
-
 # This allows easy placement of apps within the interior
 # relate directory.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
